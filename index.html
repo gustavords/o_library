@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,24 @@
     <script src="./js/script.js" async></script>
     <title>Gustavo's Library Project</title>
 </head>
+
 <body>
-    <p div="library_display"></p>
+    <div class="library_display">
+
+    </div>
+
+    <dialog id="dialog" closedby="any">
+        <form action="" method="dialog">
+            <label for="b_title">Book Title:</label>
+            <input type="text" name="b_title" id="b_title">
+            <label for="b_author">Author's Name:</label>
+            <input type="text" name="b_author" id="b_author">
+            <input type="submit" id="modal_novalidate_close" value="close" formnovalidate>
+            <button id="confirmBtn" value="default">Confirm</button>
+        </form>
+    </dialog>
+
+    <button id="add_book">add book</button>
 </body>
+
 </html>
