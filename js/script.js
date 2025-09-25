@@ -6,6 +6,7 @@ function Book ( title, author )
     this.author = author;
     this.id = crypto.randomUUID();
     this.description = () => { return `Book title: ${ this.title }, Author: ${ this.author }, ID:${ this.id }` };
+    this.read = true;
 };
 
 function addBookToLibrary ( title, author )
@@ -28,31 +29,102 @@ function displayLibrary ()
     {
         const bookCard = document.createElement( `div` );
         const bookInfo = document.createElement( `p` );
+        const read_ckb_lbl = document.createElement( `label` );
+        const read_ckb = document.createElement( `input` );
         const delete_btn = document.createElement( `button` );
+
+        read_ckb_lbl.textContent = `read: ${ book.read }`
+        read_ckb.name = `read`
+        read_ckb.type = `checkbox`;
+        read_ckb.checked = book.read;
+        read_ckb.classList.add( `read` );
+        // read_ckb.dataset.id = `${ book.id }`;
 
         delete_btn.classList.add( `delete` );
         delete_btn.value = `delete`;
         delete_btn.textContent = `delete`;
+        // delete_btn.dataset.id = `${ book.id }`;
+
+        bookCard.classList.add( `book_card` );
+        bookCard.dataset.id = `${ book.id }`;
 
         display.appendChild( bookCard );
         bookCard.appendChild( bookInfo );
+        bookCard.appendChild( read_ckb_lbl );
+        read_ckb_lbl.appendChild( read_ckb )
         bookCard.appendChild( delete_btn );
         bookInfo.textContent = `${ book.description() }`
     } );
 
-    deleteBtn();
+    deleteBookButton();
+    readBookCheckbox();
 }
 
-function deleteBtn ()
+function deleteBookButton ()
 {
-    const delete_btns = document.querySelectorAll( `.delete` );
-    delete_btns.forEach( ( button ) =>
+    const book_cards = document.querySelectorAll( `.book_card` );
+
+    book_cards.forEach( ( button ) =>
     {
         button.addEventListener( `click`, ( e ) =>
         {
-            e.target.value === `delete` ? console.log( `it is delete button` ) : console.log( `nope` );
+            if ( e.target.value === `delete` )
+            {
+                removeBookFromLibrary( button.dataset.id );
+            }
         } );
     } );
+
+
+}
+
+function readBookCheckbox ()
+{
+    const book_cards = document.querySelectorAll( `.book_card` );
+
+    book_cards.forEach( ( button ) =>
+    {
+        button.addEventListener( `click`, ( e ) =>
+        {
+            if ( e.target.name === `read` )
+            {
+                // console.log( button.dataset.id, e.target.checked );
+                changeReadCheckbox( button.dataset.id, e.target.checked )
+            }
+        } );
+    } );
+}
+
+function changeReadCheckbox ( id, boolean )
+{
+    let index = 0;
+    myLibrary.forEach( ( book ) =>
+    {
+        if ( id === book.id )
+        {
+            boolean === false ? book.read = false : book.read = true;
+            console.log( `changed ` );
+        }
+        index++
+    } );
+
+    displayLibrary();
+}
+
+function removeBookFromLibrary ( id )
+{
+    let index = 0;
+    myLibrary.forEach( ( book ) =>
+    {
+        if ( id === book.id )
+        {
+            myLibrary.splice( index, 1 );
+            console.log( `deleted` );
+        }
+        index++
+    } );
+
+    displayLibrary();
 }
 
 function modalForm ()
