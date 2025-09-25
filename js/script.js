@@ -1,17 +1,19 @@
 const myLibrary = [];
 
-function Book ( title, author )
+function Book ( title, author, read )
 {
     this.title = title;
     this.author = author;
     this.id = crypto.randomUUID();
-    this.description = () => { return `Book title: ${ this.title }, Author: ${ this.author }, ID:${ this.id }` };
-    this.read = true;
+    this.read = read;
+    this.hasReadBook = () => { return this.read === false ? read = `no` : read = `yes`; };
+    this.description = () => { return `Book title: ${ this.title }, Author: ${ this.author }, Read:${ this.hasReadBook() }` };
+
 };
 
-function addBookToLibrary ( title, author )
+function addBookToLibrary ( title, author, read )
 {
-    const book = new Book( title, author );
+    const book = new Book( title, author, read );
     myLibrary.push( book );
 }
 
@@ -88,7 +90,6 @@ function readBookCheckbox ()
         {
             if ( e.target.name === `read` )
             {
-                // console.log( button.dataset.id, e.target.checked );
                 changeReadCheckbox( button.dataset.id, e.target.checked )
             }
         } );
@@ -102,7 +103,8 @@ function changeReadCheckbox ( id, boolean )
     {
         if ( id === book.id )
         {
-            boolean === false ? book.read = false : book.read = true;
+            book.read = boolean;
+            book.hasReadBook();
             console.log( `changed ` );
         }
         index++
@@ -168,9 +170,9 @@ function modalForm ()
 
 
 
-addBookToLibrary( `Foundation`, `Isaac Asimov` );
-addBookToLibrary( `Lord of the Rings`, `J.R.R. Tolkien` );
-addBookToLibrary( `Harry Potter`, `J.K. Rowling` );
+addBookToLibrary( `Foundation`, `Isaac Asimov`, false );
+addBookToLibrary( `Lord of the Rings`, `J.R.R. Tolkien`, false );
+addBookToLibrary( `Harry Potter`, `J.K. Rowling`, true );
 
 displayLibrary();
 modalForm();
