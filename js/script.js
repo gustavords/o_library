@@ -8,7 +8,6 @@ function Book ( title, author, read )
     this.read = read;
     this.hasReadBook = () => { return this.read === false ? read = `no` : read = `yes`; };
     this.description = () => { return `Book title: ${ this.title }, Author: ${ this.author }, Read:${ this.hasReadBook() }` };
-
 };
 
 function addBookToLibrary ( title, author, read )
@@ -157,7 +156,7 @@ function modalForm ()
     dialog.addEventListener( `close`, ( e ) =>
     {
         if ( b_title.value === `` || b_author.value === `` ) { return };
-        addBookToLibrary( b_title.value, b_author.value );
+        addBookToLibrary( b_title.value, b_author.value, true );
         displayLibrary();
         clearForm();
     } )
@@ -167,8 +166,6 @@ function modalForm ()
         clearForm();
     } );
 }
-
-
 
 addBookToLibrary( `Foundation`, `Isaac Asimov`, false );
 addBookToLibrary( `Lord of the Rings`, `J.R.R. Tolkien`, false );
