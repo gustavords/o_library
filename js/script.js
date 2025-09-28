@@ -1,19 +1,75 @@
-const myLibrary = [];
-
-function Book ( title, author, read )
+class Library 
 {
-    this.title = title;
-    this.author = author;
-    this.id = crypto.randomUUID();
-    this.read = read;
-    this.hasReadBook = () => { return this.read === false ? read = `no` : read = `yes`; };
-    this.description = () => { return `Book title: ${ this.title }, Author: ${ this.author }, Read:${ this.hasReadBook() }` };
-};
+    constructor ()
+    {
+        this.shelf = [];
+    }
 
-function addBookToLibrary ( title, author, read )
+    static addBookToLibrary ( title, author, read, library )
+    {
+        library.push( Book.createBook( title, author, read ) );
+    }
+
+    static removeBookFromLibrary ( id, library )
+    {
+        let index = 0;
+        library.forEach( ( book ) =>
+        {
+            if ( id === book.id )
+            {
+                library.splice( index, 1 );
+                console.log( `deleted` );
+            }
+            index++
+        } );
+    }
+
+    static changeReadStateOfBook ( id, boolean, library )
+    {
+        let index = 0;
+        library.forEach( ( book ) =>
+        {
+            if ( id === book.id )
+            {
+                book.read = boolean;
+                book.hasReadBook();
+                console.log( `changed ` );
+            }
+            index++
+        } );
+    }
+}
+
+class Book
 {
-    const book = new Book( title, author, read );
-    myLibrary.push( book );
+    constructor ( _title, _author, _read )
+    {
+        this.title = _title;
+        this.author = _author;
+        this.read = _read;
+        this.id = crypto.randomUUID();
+        this.hasReadBook = () => { return this.read === false ? _read = `no` : _read = `yes`; };
+        this.description = () => { return `Book title: ${ this.title }, Author: ${ this.author }, Read:${ this.hasReadBook() }` };
+    }
+
+    static createBook ( title, author, read )
+    {
+        const book = new Book( title, author, read );
+        return book;
+    }
+}
+
+const myLibrary = new Library();
+
+Library.addBookToLibrary( `Foundation`, `Isaac Asimov`, false, myLibrary.shelf );
+Library.addBookToLibrary( `Lord of the Rings`, `J.R.R. Tolkien`, false, myLibrary.shelf );
+Library.addBookToLibrary( `Harry Potter`, `J.K. Rowling`, true, myLibrary.shelf );
+
+console.log( myLibrary.shelf );
+
+const libraryGUI = () =>
+{
+
 }
 
 function displayLibrary ()
@@ -26,7 +82,7 @@ function displayLibrary ()
         display.removeChild( display.lastChild );
     }
 
-    myLibrary.forEach( ( book ) =>
+    myLibrary.shelf.forEach( ( book ) =>
     {
         const bookCard = document.createElement( `div` );
         const bookInfo = document.createElement( `p` );
@@ -71,12 +127,11 @@ function deleteBookButton ()
         {
             if ( e.target.value === `delete` )
             {
-                removeBookFromLibrary( button.dataset.id );
+                Library.removeBookFromLibrary( button.dataset.id, myLibrary.shelf )
+                displayLibrary();
             }
         } );
     } );
-
-
 }
 
 function readBookCheckbox ()
@@ -89,44 +144,13 @@ function readBookCheckbox ()
         {
             if ( e.target.name === `read` )
             {
-                changeReadCheckbox( button.dataset.id, e.target.checked )
+                Library.changeReadStateOfBook( button.dataset.id, e.target.checked, myLibrary.shelf )
+                displayLibrary();
             }
         } );
     } );
 }
 
-function changeReadCheckbox ( id, boolean )
-{
-    let index = 0;
-    myLibrary.forEach( ( book ) =>
-    {
-        if ( id === book.id )
-        {
-            book.read = boolean;
-            book.hasReadBook();
-            console.log( `changed ` );
-        }
-        index++
-    } );
-
-    displayLibrary();
-}
-
-function removeBookFromLibrary ( id )
-{
-    let index = 0;
-    myLibrary.forEach( ( book ) =>
-    {
-        if ( id === book.id )
-        {
-            myLibrary.splice( index, 1 );
-            console.log( `deleted` );
-        }
-        index++
-    } );
-
-    displayLibrary();
-}
 
 function modalForm ()
 {
@@ -156,7 +180,8 @@ function modalForm ()
     dialog.addEventListener( `close`, ( e ) =>
     {
         if ( b_title.value === `` || b_author.value === `` ) { return };
-        addBookToLibrary( b_title.value, b_author.value, true );
+        //add book to display here
+        Library.addBookToLibrary( b_title.value, b_author.value, true, myLibrary.shelf );
         displayLibrary();
         clearForm();
     } )
@@ -166,10 +191,6 @@ function modalForm ()
         clearForm();
     } );
 }
-
-addBookToLibrary( `Foundation`, `Isaac Asimov`, false );
-addBookToLibrary( `Lord of the Rings`, `J.R.R. Tolkien`, false );
-addBookToLibrary( `Harry Potter`, `J.K. Rowling`, true );
 
 displayLibrary();
 modalForm();
