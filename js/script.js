@@ -59,6 +59,19 @@ class Book
     }
 }
 
+const myLibrary = new Library();
+
+Library.addBookToLibrary( `Foundation`, `Isaac Asimov`, false, myLibrary.shelf );
+Library.addBookToLibrary( `Lord of the Rings`, `J.R.R. Tolkien`, false, myLibrary.shelf );
+Library.addBookToLibrary( `Harry Potter`, `J.K. Rowling`, true, myLibrary.shelf );
+
+console.log( myLibrary.shelf );
+
+const libraryGUI = () =>
+{
+
+}
+
 function displayLibrary ()
 {
     const display = document.querySelector( `.library_display` );
@@ -138,6 +151,7 @@ function readBookCheckbox ()
     } );
 }
 
+
 function modalForm ()
 {
     const addBook_btn = document.querySelector( `#add_book` );
@@ -177,12 +191,6 @@ function modalForm ()
         clearForm();
     } );
 }
-
-const myLibrary = new Library();
-
-Library.addBookToLibrary( `Foundation`, `Isaac Asimov`, false, myLibrary.shelf );
-Library.addBookToLibrary( `Lord of the Rings`, `J.R.R. Tolkien`, false, myLibrary.shelf );
-Library.addBookToLibrary( `Harry Potter`, `J.K. Rowling`, true, myLibrary.shelf );
 
 displayLibrary();
 modalForm();
